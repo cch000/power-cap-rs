@@ -1,3 +1,4 @@
+use std::fs;
 use std::thread::sleep;
 use std::time::{self, Duration};
 
@@ -24,26 +25,35 @@ fn main() {
         max_tmp: 70,
     };
 
+    const SYS_POWER_PROFILE: &str = "/sys/firmware/acpi/platform_profile";
+
     const NAP_TIME: Duration = time::Duration::from_secs(10);
 
     let ryzen_adj = RyzenAdj::new().unwrap();
 
     let mut short_stamp_limit: u32 = 0;
+    let mut current_pwr_profile: String = String::from("");
 
     loop {
-        short_stamp_limit = ryzen_adj.get_stapm_limit().unwrap() as u32 * 1000;
+        current_pwr_profile = fs::read_to_string(SYS_POWER_PROFILE)
+            .expect("Reading pwr profile failed")
+            .trim()
+            .to_string();
 
-        if short_stamp_limit != POWER_SAVER.sus_pl {
-            ryzen_adj.set_stapm_limit(POWER_SAVER.sus_pl).unwrap();
-            ryzen_adj.set_fast_limit(POWER_SAVER.actual_pl).unwrap();
-            ryzen_adj.set_slow_limit(POWER_SAVER.sus_pl).unwrap();
-            ryzen_adj.set_tctl_temp(POWER_SAVER.max_tmp).unwrap();
+        if current_pwr_profile == "quiet" {
+            short_stamp_limit = ryzen_adj.get_stapm_limit().unwrap() as u32 * 1000;
 
-            println!("Adjusting ryzenadj values\n");
-            println!("{}", short_stamp_limit);
+            if short_stamp_limit != POWER_SAVER.sus_pl {
+                ryzen_adj.set_stapm_limit(POWER_SAVER.sus_pl).unwrap();
+                ryzen_adj.set_fast_limit(POWER_SAVER.actual_pl).unwrap();
+                ryzen_adj.set_slow_limit(POWER_SAVER.sus_pl).unwrap();
+                ryzen_adj.set_tctl_temp(POWER_SAVER.max_tmp).unwrap();
+
+                println!("Adjusting ryzenadj values\n");
+            }
+
+            ryzen_adj.refresh();
         }
-
-        ryzen_adj.refresh();
 
         sleep(NAP_TIME);
     }
