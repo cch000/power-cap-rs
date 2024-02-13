@@ -24,14 +24,14 @@ fn main() {
         max_tmp: 70,
     };
 
-    const NAP_TIME: Duration = time::Duration::from_secs(20);
+    const NAP_TIME: Duration = time::Duration::from_secs(10);
 
     let ryzen_adj = RyzenAdj::new().unwrap();
 
     let mut short_stamp_limit: u32 = 0;
 
     loop {
-        sleep(NAP_TIME);
+        short_stamp_limit = ryzen_adj.get_stapm_limit().unwrap() as u32 * 1000;
 
         if short_stamp_limit != POWER_SAVER.sus_pl {
             ryzen_adj.set_stapm_limit(POWER_SAVER.sus_pl).unwrap();
@@ -43,6 +43,8 @@ fn main() {
             println!("{}", short_stamp_limit);
         }
 
-        short_stamp_limit = ryzen_adj.get_stapm_limit().unwrap() as u32 * 1000;
+        ryzen_adj.refresh();
+
+        sleep(NAP_TIME);
     }
 }
