@@ -28,6 +28,8 @@ fn main() {
 
     let ryzen_adj = RyzenAdj::new().unwrap();
 
+    let mut short_stamp_limit: u32 = 0;
+
     loop {
         sleep(NAP_TIME);
 
@@ -41,8 +43,6 @@ fn main() {
             println!("{}", short_stamp_limit);
         }
 
-        let stamp_limit = ryzen_adj.get_stapm_limit().unwrap();
-
-        let short_stamp_limit: u32 = stamp_limit as u32 * 1000;
+        short_stamp_limit = ryzen_adj.get_stapm_limit().unwrap() as u32 * 1000;
     }
 }
