@@ -1,7 +1,7 @@
 {
   config,
-  self,
   lib,
+  pkgs,
   ...
 }: let
   cfg = config.services.pwr-cap-rs;
@@ -19,10 +19,10 @@ in {
   };
 
   config = lib.mkIf cfg.enable {
-    systemd.services.ryzenadj = {
+    systemd.services.pwr-cap-rs = {
       enable = true;
       description = "Run pwr-cap-rs as a systemd service";
-      serviceConfig.ExecStart = lib.getExe self.packages.x86_64-linux.pwr-cap-rs;
+      serviceConfig.ExecStart = pkgs.pwr-cap-rs;
       wantedBy = ["default.target"];
     };
   };

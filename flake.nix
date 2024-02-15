@@ -7,10 +7,22 @@
     treefmt-nix.url = "github:numtide/treefmt-nix";
     flake-parts.url = "github:hercules-ci/flake-parts";
   };
-  outputs = {flake-parts, ...} @ inputs:
+  outputs = {
+    flake-parts,
+    self,
+    ...
+  } @ inputs:
     flake-parts.lib.mkFlake {inherit inputs;} ({...}: {
       flake.nixosModules = {
         pwr-cap-rs = import ./modules/pwr-cap-rs.nix;
+      };
+
+      flake.overlays = {
+        nixpkgs.overlays = [
+          (_self: _super: {
+            inherit (self.packages) pwr-cap-rs;
+          })
+        ];
       };
 
       systems = ["x86_64-linux"];
