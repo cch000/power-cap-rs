@@ -22,7 +22,7 @@ in {
     systemd.services.ryzenadj = {
       enable = true;
       description = "Run pwr-cap-rs as a systemd service";
-      serviceConfig.ExecStart = lib.getExe self.packages.pwr-cap-rs;
+      serviceConfig.ExecStart = lib.getExe self.packages.x86_64-linux.pwr-cap-rs;
       wantedBy = ["default.target"];
     };
   };
