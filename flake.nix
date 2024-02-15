@@ -17,14 +17,6 @@
         pwr-cap-rs = import ./modules/pwr-cap-rs.nix;
       };
 
-      flake.overlays = {
-        nixpkgs.overlays = [
-          (_self: _super: {
-            inherit (self.packages) pwr-cap-rs;
-          })
-        ];
-      };
-
       systems = ["x86_64-linux"];
 
       imports = [
@@ -35,6 +27,7 @@
         config,
         pkgs,
         lib,
+        system,
         ...
       }: let
         buildInputs = [pkgs.pciutils];
@@ -60,6 +53,16 @@
           };
         };
       in {
+        _module.args.pkgs = import inputs.nixpkgs {
+          inherit system;
+          overlays = [
+            (_self: _super: {
+              inherit (self.packages) pwr-cap-rs;
+            })
+          ];
+          config = {};
+        };
+
         treefmt.config = {
           projectRootFile = "flake.nix";
           programs = {
