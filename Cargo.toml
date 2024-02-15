@@ -6,7 +6,5 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-changes-stream = "0.1.0"
 libryzenadj = "0.13.0"
-#tokio = { version = "1.36.0", features = ["full"] }
-#zbus = { version = "4.0.0", default-features = false, features = ["tokio"] }
+

@@ -98,12 +98,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "baf1de4339761588bc0619e3cbc0120ee582ebb74b53b4efbf79117bd2da40fd"
 
 [[package]]
-name = "changes-stream"
-version = "0.1.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0f345b253df46566122e8ae740b8531d9f2ef71a21efe35fe6ddab6e3535ace3"
-
-[[package]]
 name = "chrono"
 version = "0.4.34"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -410,7 +404,6 @@ dependencies = [
 name = "pwr-cap-rs"
 version = "0.1.0"
 dependencies = [
- "changes-stream",
  "libryzenadj",
 ]
 

@@ -4,12 +4,16 @@
   # All inputs for the system
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-
     treefmt-nix.url = "github:numtide/treefmt-nix";
     flake-parts.url = "github:hercules-ci/flake-parts";
   };
   outputs = {flake-parts, ...} @ inputs:
     flake-parts.lib.mkFlake {inherit inputs;} ({...}: {
+
+      flake.nixosModules = {
+        pwr-cap-rs = import ./modules/pwr-cap-rs.nix;
+      };
+
       systems = ["x86_64-linux"];
 
       imports = [
@@ -19,6 +23,7 @@
       perSystem = {
         config,
         pkgs,
+        lib,
         ...
       }: let
         buildInputs = [pkgs.pciutils];
@@ -30,11 +35,18 @@
           rustPlatform.bindgenHook
         ];
 
-        pwr-cap-rs = pkgs.rustPlatform.buildRustPackage {
+        pwr-cap-rs = pkgs.rustPlatform.buildRustPackage rec {
           inherit buildInputs nativeBuildInputs;
           name = "pwr-cap-rs";
           cargoLock.lockFile = ./Cargo.lock;
           src = ./.;
+
+          meta = {
+            maintainers = with lib.maintainers; [cch000];
+            mainProgram = name;
+            platforms = ["x86_64-linux"];
+            license = lib.licenses.gpl3Plus;
+          };
         };
       in {
         treefmt.config = {
@@ -47,17 +59,16 @@
           };
         };
         devShells.default = pkgs.mkShell {
+          inherit buildInputs nativeBuildInputs;
+
           inputsFrom = [config.treefmt.build.devShell];
 
           packages = with pkgs; [
             nil
             rustc
             cargo
+            rust-analyzer
           ];
-
-          inherit buildInputs nativeBuildInputs;
-
-          BINDGEN_EXTRA_CLANG_ARGS = "-I ${pkgs.pciutils}/Include";
         };
 
         packages.default = pwr-cap-rs;
