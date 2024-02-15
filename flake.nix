@@ -57,7 +57,7 @@
           inherit system;
           overlays = [
             (_self: _super: {
-              inherit (self.packages) pwr-cap-rs;
+              pwr-cap-rs = self.packages.${pkgs.system}.pwr-cap-rs;
             })
           ];
           config = {};
