@@ -1,5 +1,5 @@
 {
-  description = "NixOS configuration";
+  description = "Service to limit power consumption on ryzen cpus";
 
   # All inputs for the system
   inputs = {
@@ -9,7 +9,6 @@
   };
   outputs = {flake-parts, ...} @ inputs:
     flake-parts.lib.mkFlake {inherit inputs;} ({...}: {
-
       flake.nixosModules = {
         pwr-cap-rs = import ./modules/pwr-cap-rs.nix;
       };
@@ -71,7 +70,9 @@
           ];
         };
 
-        packages.default = pwr-cap-rs;
+        packages = {
+          inherit pwr-cap-rs;
+        };
       };
     });
 }
