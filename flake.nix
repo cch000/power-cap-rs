@@ -14,7 +14,7 @@
   } @ inputs:
     flake-parts.lib.mkFlake {inherit inputs;} ({...}: {
       flake.nixosModules = {
-        pwr-cap-rs = import ./modules/pwr-cap-rs.nix;
+        pwr-cap-rs = import ./modules/pwr-cap-rs.nix self;
       };
 
       systems = ["x86_64-linux"];
@@ -27,7 +27,6 @@
         config,
         pkgs,
         lib,
-        system,
         ...
       }: let
         buildInputs = [pkgs.pciutils];
@@ -53,16 +52,6 @@
           };
         };
       in {
-        _module.args.pkgs = import inputs.nixpkgs {
-          inherit system;
-          overlays = [
-            (_self: _super: {
-              pwr-cap-rs = self.packages.${pkgs.system}.pwr-cap-rs;
-            })
-          ];
-          config = {};
-        };
-
         treefmt.config = {
           projectRootFile = "flake.nix";
           programs = {

@@ -1,9 +1,10 @@
-{
+flake: {
   config,
   lib,
-  pkgs,
+  self,
   ...
 }: let
+  inherit (flake.packages.x86_64-linux) pwr-cap-rs;
   cfg = config.services.pwr-cap-rs;
 in {
   options = {
@@ -22,7 +23,7 @@ in {
     systemd.services.pwr-cap-rs = {
       enable = true;
       description = "Run pwr-cap-rs as a systemd service";
-      serviceConfig.ExecStart = pkgs.pwr-cap-rs;
+      serviceConfig.ExecStart = lib.getExe pwr-cap-rs;
       wantedBy = ["default.target"];
     };
   };
