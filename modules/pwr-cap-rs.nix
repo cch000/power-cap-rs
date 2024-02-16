@@ -1,3 +1,6 @@
+# https://github.com/reckenrode/nix-foundryvtt/blob/main/flake.nix
+# Why do we have to pass the flake as an argument?
+# Why can't I just use self for the package?
 flake: {
   config,
   lib,
