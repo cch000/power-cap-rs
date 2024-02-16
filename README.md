@@ -9,6 +9,7 @@ Built using ![ryzenadj libraries mappings to rust](https://crates.io/crates/libr
 ## Usage
 
 First add it to your system flake inputs:
+
 `power-cap-rs.url = "github:cch000/power-cap-rs;`
 
 Then you can use it by adding somewhere in your config:
