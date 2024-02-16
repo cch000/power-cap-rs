@@ -4,7 +4,6 @@
 flake: {
   config,
   lib,
-  self,
   ...
 }: let
   inherit (flake.packages.x86_64-linux) pwr-cap-rs;
@@ -19,6 +18,34 @@ in {
           "Run pwr-cap-rs as a systemd service"
         '';
       };
+      stapm-limit = lib.mkOption {
+        type = lib.types.ints.unsigned;
+        default = 7000;
+        description = ''
+          Sustained Power Limit
+        '';
+      };
+      fast-limit = lib.mkOption {
+        type = lib.types.ints.unsigned;
+        default = 7000;
+        description = ''
+          Actual Power Limit
+        '';
+      };
+      slow-limit = lib.mkOption {
+        type = lib.types.ints.unsigned;
+        default = 7000;
+        description = ''
+          Average Power Limit
+        '';
+      };
+      tctl-temp = lib.mkOption {
+        type = lib.types.ints.unsigned;
+        default = 69;
+        description = ''
+          Tctl Temperature Limit (Celsius)
+        '';
+      };
     };
   };
 
@@ -28,6 +55,13 @@ in {
       description = "Run pwr-cap-rs as a systemd service";
       serviceConfig.ExecStart = lib.getExe pwr-cap-rs;
       wantedBy = ["default.target"];
+    };
+
+    environment.etc."pwr-cap-rs.json".text = builtins.toJSON {
+      sus_pl = cfg.stapm-limit;
+      actual_pl = cfg.fast-limit;
+      avg_pl = cfg.slow-limit;
+      max_tmp = cfg.tctl-temp;
     };
   };
 }
