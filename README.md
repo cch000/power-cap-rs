@@ -2,7 +2,7 @@
 
 Flake that provides an easy way to limit the power consumption of your ryzen cpu.
 The limit is only triggered when the power profile is set to `power-saver`.
-Built using ![ryzenadj libraries mappings to rust](https://crates.io/crates/libryzenadj)
+Built using [ryzenadj libraries mappings to rust](https://crates.io/crates/libryzenadj)
 
 **WIP:** basically every commit is going to break something.
 
