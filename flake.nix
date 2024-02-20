@@ -44,11 +44,11 @@
           cargoLock.lockFile = ./Cargo.lock;
           src = ./.;
 
-          meta = {
-            maintainers = with lib.maintainers; [cch000];
+          meta = with lib; {
+            maintainers = [maintainers.cch000];
             mainProgram = name;
             platforms = ["x86_64-linux"];
-            license = lib.licenses.gpl3Plus;
+            license = licenses.gpl3Plus;
           };
         };
       in {
