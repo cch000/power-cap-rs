@@ -38,9 +38,11 @@
           rustPlatform.bindgenHook
         ];
 
-        pwr-cap-rs = pkgs.rustPlatform.buildRustPackage rec {
-          inherit buildInputs nativeBuildInputs;
-          name = "pwr-cap-rs";
+        name = "pwr-cap-rs";
+
+        pwr-cap-rs = pkgs.rustPlatform.buildRustPackage {
+          inherit buildInputs nativeBuildInputs name;
+
           cargoLock.lockFile = ./Cargo.lock;
           src = ./.;
 
@@ -76,6 +78,7 @@
 
         packages = {
           inherit pwr-cap-rs;
+          default = pwr-cap-rs;
         };
       };
     });

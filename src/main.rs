@@ -46,7 +46,7 @@ fn main() {
             if short_fast_limit != config.actual_pl.expect("actual_pl cannot be null") {
                 apply_values(&config, &ryzen_adj);
 
-                println!("Adjusting ryzenadj values\n");
+                println!("Adjusting ryzenadj values");
             }
 
             ryzen_adj
@@ -60,7 +60,6 @@ fn main() {
 
 // function to dynamically call ryzenadj traits
 fn apply_values(config: &Config, ryzenadj: &RyzenAdj) {
-
     config.sus_pl.map(|sus_pl| ryzenadj.set_stapm_limit(sus_pl));
 
     config.actual_pl.map(|actual_pl| ryzenadj.set_fast_limit(actual_pl));
