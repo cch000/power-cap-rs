@@ -1,12 +1,9 @@
-# https://github.com/reckenrode/nix-foundryvtt/blob/main/flake.nix
-# Why do we have to pass the flake as an argument?
-# Why can't I just use self for the package?
-flake: {
+self: {
   config,
   lib,
   ...
 }: let
-  inherit (flake.packages.x86_64-linux) pwr-cap-rs;
+  inherit (self.packages.x86_64-linux) pwr-cap-rs;
   cfg = config.services.pwr-cap-rs;
 in {
   options = {

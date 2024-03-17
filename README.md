@@ -1,13 +1,11 @@
 # pwr-cap-rs
 
-Flake that provides an easy way to limit the power consumption of your ryzen mobile cpu.
+Flake that provides an easy way to limit the power consumption of your Ryzen mobile CPU.
 The limit is only triggered when the power profile is set to `power-saver`.
 Built using [ryzenadj libraries mappings to rust](https://crates.io/crates/libryzenadj)
 
-Note: for information about supported models check the 
+Note: for information about supported CPUs check the 
 [ryzenadj repo](https://github.com/FlyGoat/RyzenAdj)
-
-**WIP:** basically every commit is going to break something.
 
 ## Usage
 
@@ -24,8 +22,8 @@ Then you can use it by adding somewhere in your config:
 
   services.pwr-cap-rs = {
     enable = true;
-    stapm-limit = 7000; # Change to your liking
-    fast-limit = 7000;
+    stapm-limit = 7000;
+    fast-limit = 7000; # Cannot be null
     slow-limit = 7000;
     tctl-temp = 70;
   };
