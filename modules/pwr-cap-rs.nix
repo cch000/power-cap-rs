@@ -80,13 +80,13 @@ in {
         unitConfig = {
           ConditionACPower = "false";
         };
-
-        services.udev.extraRules = let
-          unplug = ''ACTION=="change", KERNEL=="AC0", SUBSYSTEM=="power_supply", ATTR{online}=="0", RUN+="${pkgs.systemd}/bin/systemctl start pwr-cap-rs.service"'';
-          plug = ''ACTION=="change", KERNEL=="AC0", SUBSYSTEM=="power_supply", ATTR{online}=="1", RUN+="${pkgs.systemd}/bin/systemctl stop pwr-cap-rs.service"'';
-        in
-          lib.strings.concatLines [unplug plug];
       };
+
+      services.udev.extraRules = let
+        unplug = ''ACTION=="change", KERNEL=="AC0", SUBSYSTEM=="power_supply", ATTR{online}=="0", RUN+="${pkgs.systemd}/bin/systemctl start pwr-cap-rs.service"'';
+        plug = ''ACTION=="change", KERNEL=="AC0", SUBSYSTEM=="power_supply", ATTR{online}=="1", RUN+="${pkgs.systemd}/bin/systemctl stop pwr-cap-rs.service"'';
+      in
+        lib.strings.concatLines [unplug plug];
     })
   ]);
 }
