@@ -22,6 +22,7 @@ Then you can use it by adding somewhere in your config:
 
   services.pwr-cap-rs = {
     enable = true;
+    onlyOnBattery = true;
     stapm-limit = 7000;
     fast-limit = 7000; # Cannot be null
     slow-limit = 7000;
