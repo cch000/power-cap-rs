@@ -25,10 +25,8 @@ struct Profile {
 }
 
 impl Profile {
-    pub fn apply(&self) {
+    pub fn apply(&self, ryzenadj: &RyzenAdj) {
         if self.enable {
-            let ryzenadj: RyzenAdj = RyzenAdj::new().unwrap();
-
             let fast_limit = ryzenadj.get_fast_limit().unwrap() as u32 * 1000;
             if fast_limit != self.fast_limit.expect("fast limit cannot be null") {
                 ryzenadj
@@ -139,23 +137,23 @@ fn main() {
         match system.power_profile {
             PowerProfileValue::Quiet => {
                 if system.plugged {
-                    config.quiet.plugged.apply();
+                    config.quiet.plugged.apply(&ryzenadj);
                 } else {
-                    config.quiet.unplugged.apply();
+                    config.quiet.unplugged.apply(&ryzenadj);
                 }
             }
             PowerProfileValue::Balaced => {
                 if system.plugged {
-                    config.balanced.plugged.apply();
+                    config.balanced.plugged.apply(&ryzenadj);
                 } else {
-                    config.balanced.unplugged.apply();
+                    config.balanced.unplugged.apply(&ryzenadj);
                 }
             }
             PowerProfileValue::Performance => {
                 if system.plugged {
-                    config.performance.plugged.apply();
+                    config.performance.plugged.apply(&ryzenadj);
                 } else {
-                    config.performance.unplugged.apply();
+                    config.performance.unplugged.apply(&ryzenadj);
                 }
             }
         }
@@ -164,6 +162,10 @@ fn main() {
                 .set_tctl_temp(config.tctl_limit.unwrap())
                 .expect("failed to apply tctl limit");
         }
+
+        ryzenadj
+            .refresh()
+            .expect("failed to refresh ryzenadj values");
 
         sleep(NAP_TIME);
     }
