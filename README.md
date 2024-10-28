@@ -1,7 +1,6 @@
 # pwr-cap-rs
 
-Flake that provides an easy way to limit the power consumption of your Ryzen mobile CPU.
-The limit is only triggered when the power profile is set to `power-saver`.
+Flake that provides an easy way to limit the power consumption of your Ryzen CPU.
 Built using [ryzenadj libraries mappings to rust](https://crates.io/crates/libryzenadj)
 
 Note: for information about supported CPUs check the 
@@ -20,13 +19,28 @@ Then you can use it by adding somewhere in your config:
     inputs.power-cap-rs.nixosModules.pwr-cap-rs
   ];
 
+  #example config
   services.pwr-cap-rs = {
     enable = true;
-    onlyOnBattery = true;
-    stapm-limit = 7000;
-    fast-limit = 7000; # Cannot be null
-    slow-limit = 7000;
-    tctl-temp = 70;
+    tctl_limit = 85;
+    quiet = {
+      unplugged = {
+        enable = true;
+        stapm_limit = 7000;
+        fast_limit = 7000; #cannot be null if the profile is enabled
+        #slow_limit = 7000;
+        apu_slow_limit = 20000;
+      };
+      plugged.enable = false;
+    };
+    balanced = {
+      unplugged.enable = false;
+      plugged.enable = false;
+    };
+    performance = {
+      unplugged.enable = false;
+      plugged.enable = false;
+    };
   };
 ```
 

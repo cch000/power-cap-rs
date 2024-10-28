@@ -11,7 +11,7 @@ const SYS_POWER_PROFILE: &str = "/sys/firmware/acpi/platform_profile";
 const SYS_CONNECTED: &str = "/sys/class/power_supply/AC0/online";
 
 #[cfg(debug_assertions)]
-const CONFIG_PATH: &str = "./data/pwr-cap-rs.json";
+const CONFIG_PATH: &str = "./example-config/pwr-cap-rs.json";
 #[cfg(not(debug_assertions))]
 const CONFIG_PATH: &str = "/etc/pwr-cap-rs.json";
 

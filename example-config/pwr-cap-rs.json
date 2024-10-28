@@ -1,0 +1,51 @@
+{
+    "balanced": {
+        "plugged": {
+            "apu_slow_limit": null,
+            "enable": false,
+            "fast_limit": null,
+            "slow_limit": null,
+            "stapm_limit": null
+        },
+        "unplugged": {
+            "apu_slow_limit": null,
+            "enable": false,
+            "fast_limit": null,
+            "slow_limit": null,
+            "stapm_limit": null
+        }
+    },
+    "performance": {
+        "plugged": {
+            "apu_slow_limit": null,
+            "enable": false,
+            "fast_limit": null,
+            "slow_limit": null,
+            "stapm_limit": null
+        },
+        "unplugged": {
+            "apu_slow_limit": null,
+            "enable": false,
+            "fast_limit": null,
+            "slow_limit": null,
+            "stapm_limit": null
+        }
+    },
+    "quiet": {
+        "plugged": {
+            "apu_slow_limit": null,
+            "enable": false,
+            "fast_limit": null,
+            "slow_limit": null,
+            "stapm_limit": null
+        },
+        "unplugged": {
+            "apu_slow_limit": 20000,
+            "enable": true,
+            "fast_limit": 7000,
+            "slow_limit": 7000,
+            "stapm_limit": 7000
+        }
+    },
+    "tctl_limit": 85
+}
