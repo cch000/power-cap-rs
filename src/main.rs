@@ -18,9 +18,10 @@ const CONFIG_PATH: &str = "/etc/pwr-cap-rs.json";
 #[derive(Serialize, Deserialize)]
 struct Profile {
     enable: bool,
-    stapm_limit: Option<u32>,      // Sustained Power Limit (mW)
-    fast_limit: Option<u32>, // ACTUAL Power Limit    (mW)
-    slow_limit: Option<u32>,       // Average Power Limit   (mW)
+    stapm_limit: Option<u32>,    // Sustained Power Limit (mW)
+    fast_limit: Option<u32>,     // ACTUAL Power Limit    (mW)
+    slow_limit: Option<u32>,     // Average Power Limit   (mW)
+    apu_slow_limit: Option<u32>, // APU Power Limit       (mW)
 }
 
 impl Profile {
@@ -29,7 +30,7 @@ impl Profile {
             let ryzenadj: RyzenAdj = RyzenAdj::new().unwrap();
 
             let fast_limit = ryzenadj.get_fast_limit().unwrap() as u32 * 1000;
-            if fast_limit != self.fast_limit.expect("actual cannot be null") {
+            if fast_limit != self.fast_limit.expect("fast limit cannot be null") {
                 ryzenadj
                     .set_fast_limit(self.fast_limit.unwrap())
                     .expect("failed to apply fast_limit");
@@ -43,6 +44,11 @@ impl Profile {
                     ryzenadj
                         .set_slow_limit(self.slow_limit.unwrap())
                         .expect("failed to apply slow_limit");
+                }
+                if self.apu_slow_limit.is_some() {
+                    ryzenadj
+                        .set_apu_slow_limit(self.apu_slow_limit.unwrap())
+                        .expect("failed to APU slow limit");
                 }
             }
         }
@@ -72,6 +78,7 @@ struct Config {
     quiet: QuietProfile,
     balanced: BalacedProfile,
     performance: PerformanceProfile,
+    tctl_limit: Option<u32>,
 }
 
 impl Config {
@@ -125,6 +132,7 @@ impl System {
 
 fn main() {
     let config: Config = Config::load().unwrap();
+    let ryzenadj: RyzenAdj = RyzenAdj::new().unwrap();
     loop {
         let system: System = System::new();
 
@@ -150,6 +158,11 @@ fn main() {
                     config.performance.unplugged.apply();
                 }
             }
+        }
+        if config.tctl_limit.is_some() {
+            ryzenadj
+                .set_tctl_temp(config.tctl_limit.unwrap())
+                .expect("failed to apply tctl limit");
         }
 
         sleep(NAP_TIME);

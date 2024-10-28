@@ -14,7 +14,7 @@
   } @ inputs:
     flake-parts.lib.mkFlake {inherit inputs;} ({...}: {
       flake.nixosModules = {
-        pwr-cap-rs = import ./modules/pwr-cap-rs.nix self;
+        pwr-cap-rs = import ./modules/default.nix self;
       };
 
       systems = ["x86_64-linux"];
