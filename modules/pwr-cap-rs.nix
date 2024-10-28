@@ -7,6 +7,31 @@ self: {
   inherit (self.packages.x86_64-linux) pwr-cap-rs;
   inherit (lib) mkMerge mkOption mkIf types getExe strings;
   cfg = config.services.pwr-cap-rs;
+  profile = types.submodule {
+    options = {
+      enable = mkOption {
+        default = false;
+        type = types.bool;
+        description = ''
+        '';
+      };
+      stapm_limit = mkOption {
+        default = null;
+        type = with types; nullOr ints.unsigned;
+        description = "";
+      };
+      fast_limit = mkOption {
+        default = null;
+        type = with types; nullOr ints.unsigned;
+        description = "";
+      };
+      slow_limit = mkOption {
+        default = null;
+        type = with types; nullOr ints.unsigned;
+        description = "";
+      };
+    };
+  };
 in {
   options = {
     services.pwr-cap-rs = {
@@ -14,44 +39,53 @@ in {
         default = false;
         type = types.bool;
         description = ''
-          "Run pwr-cap-rs as a systemd service"
+          Run pwr-cap-rs as a systemd service
         '';
       };
-      stapm-limit = mkOption {
-        type = with types; nullOr ints.unsigned;
-        default = null;
-        description = ''
-          Sustained Power Limit (mW)
-        '';
+      quiet = mkOption {
+        type = types.submodule {
+          options = {
+            enable = mkOption {
+              default = false;
+              type = types.bool;
+              description = ''
+                enable quiet profile
+              '';
+              plugged = profile;
+              unplugged = profile;
+            };
+          };
+        };
       };
-      fast-limit = mkOption {
-        type = types.ints.unsigned;
-        default = null;
-        description = ''
-          Actual Power Limit (mW).
-          Cannot be null, you must set a value that suits your usecase.
-        '';
+      balanced = mkOption {
+        type = types.submodule {
+          options = {
+            enable = mkOption {
+              default = false;
+              type = types.bool;
+              description = ''
+                enable quiet profile
+              '';
+              plugged = profile;
+              unplugged = profile;
+            };
+          };
+        };
       };
-      slow-limit = mkOption {
-        type = with types; nullOr ints.unsigned;
-        default = null;
-        description = ''
-          Average Power Limit (mW)
-        '';
-      };
-      tctl-temp = mkOption {
-        type = with types; nullOr ints.unsigned;
-        default = null;
-        description = ''
-          Tctl Temperature Limit (Celsius)
-        '';
-      };
-      onlyOnBattery = mkOption {
-        default = false;
-        type = types.bool;
-        description = ''
-          Wether to stop the service when the laptop is plugged in
-        '';
+      performance = mkOption {
+        type = types.submodule {
+          options = {
+            enable = mkOption {
+              default = false;
+              type = types.bool;
+              description = ''
+                enable quiet profile
+              '';
+              plugged = profile;
+              unplugged = profile;
+            };
+          };
+        };
       };
     };
   };
@@ -69,12 +103,9 @@ in {
         };
       };
 
-      environment.etc."pwr-cap-rs.json".text = builtins.toJSON {
-        sus_pl = cfg.stapm-limit;
-        actual_pl = cfg.fast-limit;
-        avg_pl = cfg.slow-limit;
-        max_tmp = cfg.tctl-temp;
-      };
+      environment.etc."pwr-cap-rs.json".text =
+        builtins.toJSON {
+        };
     }
     (mkIf (!cfg.onlyOnBattery) {
       systemd.services.pwr-cap-rs.wantedBy = ["default.target"];
