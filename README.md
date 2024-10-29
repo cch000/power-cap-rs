@@ -16,7 +16,7 @@ Then you can use it by adding somewhere in your config:
 
 ```nix
   imports = [
-    inputs.power-cap-rs.nixosModules.pwr-cap-rs
+    inputs.pwr-cap-rs.nixosModules.pwr-cap-rs
   ];
 
   #example config
