@@ -1,5 +1,4 @@
 self: {
-  pkgs,
   config,
   lib,
   ...
@@ -95,10 +94,10 @@ in {
       };
 
       environment.etc."pwr-cap-rs.json".text = builtins.toJSON {
-        quiet = cfg.quiet;
-        balanced = cfg.balanced;
-        performance = cfg.performance;
-        tctl_limit = cfg.tctl_limit;
+        inherit (cfg) quiet;
+        inherit (cfg) balanced;
+        inherit (cfg) performance;
+        inherit (cfg) tctl_limit;
       };
     };
 }
