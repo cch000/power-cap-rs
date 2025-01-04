@@ -27,9 +27,9 @@ Then you can use it by adding somewhere in your config:
       enable = true;
       unplugged = {
         enable = true;
-        stapm_limit = limit;
-        fast_limit = limit;
-        slow_limit = limit;
+        stapm_limit = 7000;
+        fast_limit = 7000;
+        slow_limit = 7000;
         apu_slow_limit = 20000;
       };
     };
