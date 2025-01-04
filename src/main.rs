@@ -2,7 +2,10 @@ mod profile;
 mod system;
 
 use profile::Profile;
-use system::{PowerProfileValue, System};
+use system::{
+    PowerProfileValue::{Balaced, Performance, Quiet},
+    System,
+};
 
 use libryzenadj::RyzenAdj;
 use serde::{Deserialize, Serialize};
@@ -58,21 +61,21 @@ fn main() {
         let system: System = System::new();
 
         match system.get_power_profile() {
-            PowerProfileValue::Quiet => {
+            Quiet => {
                 if system.get_connected() {
                     config.quiet.plugged.apply(&ryzenadj);
                 } else {
                     config.quiet.unplugged.apply(&ryzenadj);
                 }
             }
-            PowerProfileValue::Balaced => {
+            Balaced => {
                 if system.get_connected() {
                     config.balanced.plugged.apply(&ryzenadj);
                 } else {
                     config.balanced.unplugged.apply(&ryzenadj);
                 }
             }
-            PowerProfileValue::Performance => {
+            Performance => {
                 if system.get_connected() {
                     config.performance.plugged.apply(&ryzenadj);
                 } else {

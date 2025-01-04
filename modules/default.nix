@@ -4,16 +4,13 @@ self: {
   ...
 }: let
   inherit (self.packages.x86_64-linux) pwr-cap-rs;
-  inherit (lib) mkOption mkIf types getExe;
+  inherit (lib) mkOption mkEnableOption mkIf types getExe;
   cfg = config.services.pwr-cap-rs;
   profile = {
+    default = {};
     type = types.submodule {
       options = {
-        enable = mkOption {
-          default = false;
-          type = types.bool;
-          description = "";
-        };
+        enable = mkEnableOption "profile";
         stapm_limit = mkOption {
           default = null;
           type = with types; nullOr ints.unsigned;
@@ -40,35 +37,37 @@ self: {
 in {
   options = {
     services.pwr-cap-rs = {
-      enable = mkOption {
-        default = false;
-        type = types.bool;
-        description = "Run pwr-cap-rs as a systemd service";
-      };
+      enable = mkEnableOption "pwr-cap-rs service";
       tctl_limit = mkOption {
         default = null;
         type = with types; nullOr ints.unsigned;
         description = "";
       };
       quiet = mkOption {
+        default = {};
         type = types.submodule {
           options = {
+            enable = mkEnableOption "quiet profile";
             unplugged = mkOption profile;
             plugged = mkOption profile;
           };
         };
       };
       balanced = mkOption {
+        default = {};
         type = types.submodule {
           options = {
+            enable = mkEnableOption "balanced profile";
             unplugged = mkOption profile;
             plugged = mkOption profile;
           };
         };
       };
       performance = mkOption {
+        default = {};
         type = types.submodule {
           options = {
+            enable = mkEnableOption "performance profile";
             unplugged = mkOption profile;
             plugged = mkOption profile;
           };
@@ -81,7 +80,7 @@ in {
     mkIf cfg.enable
     {
       systemd.services.pwr-cap-rs = {
-        description = "limit ryzen cpu power consumption when on power-saver";
+        description = "tweak ryzen cpu power consumption";
 
         serviceConfig = {
           Type = "simple";
@@ -94,10 +93,7 @@ in {
       };
 
       environment.etc."pwr-cap-rs.json".text = builtins.toJSON {
-        inherit (cfg) quiet;
-        inherit (cfg) balanced;
-        inherit (cfg) performance;
-        inherit (cfg) tctl_limit;
+        inherit (cfg) quiet balanced performance tctl_limit;
       };
     };
 }

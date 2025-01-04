@@ -10,9 +10,7 @@
     self,
     ...
   }: let
-    system = "x86_64-linux";
-
-    pkgs = nixpkgs.legacyPackages.${system};
+    pkgs = nixpkgs.legacyPackages.x86_64-linux;
 
     treefmtEval = treefmt-nix.lib.evalModule pkgs {
       projectRootFile = "flake.nix";
@@ -47,11 +45,11 @@
   in {
     nixosModules.pwr-cap-rs = import ./modules self;
 
-    formatter.${system} = treefmt.wrapper;
+    formatter.${pkgs.system} = treefmt.wrapper;
 
-    checks.${system}.formatting = treefmt.check self;
+    checks.${pkgs.system}.formatting = treefmt.check self;
 
-    devShells.${system}.default = pkgs.mkShell {
+    devShells.${pkgs.system}.default = pkgs.mkShell {
       inherit buildInputs nativeBuildInputs;
       inputsFrom = [treefmt.devShell];
       packages = with pkgs; [
@@ -63,7 +61,7 @@
       ];
     };
 
-    packages.${system} = {
+    packages.${pkgs.system} = {
       inherit pwr-cap-rs;
       default = pwr-cap-rs;
     };

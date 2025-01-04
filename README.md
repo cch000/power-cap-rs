@@ -24,22 +24,14 @@ Then you can use it by adding somewhere in your config:
     enable = true;
     tctl_limit = 85;
     quiet = {
+      enable = true;
       unplugged = {
         enable = true;
-        stapm_limit = 7000;
-        fast_limit = 7000; #cannot be null if the profile is enabled
-        #slow_limit = 7000;
+        stapm_limit = limit;
+        fast_limit = limit;
+        slow_limit = limit;
         apu_slow_limit = 20000;
       };
-      plugged.enable = false;
-    };
-    balanced = {
-      unplugged.enable = false;
-      plugged.enable = false;
-    };
-    performance = {
-      unplugged.enable = false;
-      plugged.enable = false;
     };
   };
 ```
